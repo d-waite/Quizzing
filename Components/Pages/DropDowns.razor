@@ -1,0 +1,38 @@
+﻿
+<form>
+<label for="qtype">Question Type:</label>
+<InputSelect name="qtype" id="qtype" @bind-Value="selectedType" @oninput="onTypeChange">
+	<option value="" selected disabled>Select...</option>
+	<option value="mc">Multiple Choice</option>
+	<option value="s">Speed</option>
+</InputSelect>
+
+<label for="qpts">Point Amount:</label>
+<InputSelect name= "qpts" id="qpts" @bind-Value="selectedPoints" disabled="@isMultipleChoice">
+	<option value="" selected disabled>Select...</option>
+	<option value="20">20</option>
+	<option value="30">30</option>
+	<option value="40">40</option>
+</InputSelect>
+</form>
+
+@code {
+	private string selectedType = "";
+	private string selectedPoints = "";
+	private bool isMultipleChoice = false;
+
+
+	private void onTypeChange(ChangeEventArgs e)
+	{
+		selectedType = e.Value?.ToString() ?? "";
+
+		isMultipleChoice = selectedType == "mc";
+
+		if (isMultipleChoice)
+		{
+			selectedPoints = "20";
+		}
+
+		StateHasChanged();
+	}
+}
