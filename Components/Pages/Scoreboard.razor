@@ -2,21 +2,45 @@
 <button @onclick="AddTeam">Add Team</button>
 <button @onclick="RemoveTeam">Remove Team</button>
 
+@if (showForm)
+{
+	<DropDowns @rendermode="InteractiveServer" QuestionNum="@questionNumStr"/>
+}
 
-<div class="d-flex flex-column">
-	@foreach (QuizzingTeam team in teams)
-	{
-		<div class="d-flex gap-2">
 
-			<div class="d-flex">@team.Name</div>
-			<div class="d-flex">Score: @team.Score</div>
-
-		</div>
-	}
+<div class="d-flex pt-3">
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Teams</th>
+				@for (int i = 1; i <= 50; i++)
+				{
+					int currentNum = i;
+					<td><button class="fw-bold" @onclick="() => ChooseQuestion(currentNum)">@i</button></td>
+				}
+				<th>Score</th>
+			</tr>
+		</thead>
+		<tbody>
+		@foreach (QuizzingTeam team in teams)
+		{
+			<tr>
+				<th>@team.Name</th>
+				@for (int i = 1; i <= 50; i++)
+				{
+					<td><input type="checkbox" /></td>
+				}
+					<th>@team.Score</th>
+			</tr>
+		}
+		</tbody>
+	</table>
 </div>
 
 @code {
-	List<QuizzingTeam> teams = new List<QuizzingTeam>();
+	private List<QuizzingTeam> teams = new List<QuizzingTeam>();
+	private bool showForm = false;
+	private string questionNumStr;
 
 	void AddTeam()
 	{
@@ -33,5 +57,11 @@
 			teams.Remove(teams[teams.Count - 1]);
 			StateHasChanged();
 		}
+	}
+
+	void ChooseQuestion(int number)
+	{
+		showForm = true;
+		questionNumStr = number.ToString();
 	}
 }

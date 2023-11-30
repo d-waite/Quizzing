@@ -1,4 +1,6 @@
 ﻿
+<p>Question @QuestionNum</p>
+
 <form>
 <label for="qtype">Question Type:</label>
 <InputSelect name="qtype" id="qtype" @bind-Value="selectedType" @oninput="onTypeChange">
@@ -20,6 +22,9 @@
 	private string selectedType = "";
 	private string selectedPoints = "";
 	private bool isMultipleChoice = false;
+
+	[Parameter]
+	public string QuestionNum { get; set; }
 
 
 	private void onTypeChange(ChangeEventArgs e)
