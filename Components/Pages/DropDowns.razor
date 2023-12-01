@@ -1,7 +1,7 @@
 ﻿
 <p>Question @QuestionNum</p>
 
-<form>
+<form onsubmit="">
 <label for="qtype">Question Type:</label>
 <InputSelect name="qtype" id="qtype" @bind-Value="selectedType" @oninput="onTypeChange">
 	<option value="" selected disabled>Select...</option>
@@ -16,6 +16,9 @@
 	<option value="30">30</option>
 	<option value="40">40</option>
 </InputSelect>
+
+<button type="submit">Submit</button>
+
 </form>
 
 @code {
@@ -25,6 +28,8 @@
 
 	[Parameter]
 	public string QuestionNum { get; set; }
+	[Parameter]
+	public List<Question> Questions { get; set; }
 
 
 	private void onTypeChange(ChangeEventArgs e)
@@ -39,5 +44,11 @@
 		}
 
 		StateHasChanged();
+	}
+
+	private void UpdateQuestion(QuestionType qtype, int qpts, int qnum)
+	{
+		Questions[qnum - 1].Type = qtype;
+		Questions[qnum - 1].PointAmt = qpts;
 	}
 }

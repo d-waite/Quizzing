@@ -4,7 +4,7 @@
 
 @if (showForm)
 {
-	<DropDowns @rendermode="InteractiveServer" QuestionNum="@questionNumStr"/>
+	<DropDowns @rendermode="InteractiveServer" QuestionNum="@questionNumStr" Questions="@questions"/>
 }
 
 
@@ -28,7 +28,8 @@
 				<th>@team.Name</th>
 				@for (int i = 1; i <= 50; i++)
 				{
-					<td><input type="checkbox" /></td>
+						<td><button> <img src="svg/check.svg"/> </button><button> <img src="svg/x.svg"/> </button></td>
+					
 				}
 					<th>@team.Score</th>
 			</tr>
@@ -39,8 +40,17 @@
 
 @code {
 	private List<QuizzingTeam> teams = new List<QuizzingTeam>();
+	private List<Question> questions = new List<Question>();
 	private bool showForm = false;
 	private string questionNumStr;
+
+	protected override void OnInitialized()
+	{
+		for (int i = 0; i < 50; i++)
+		{
+			questions.Add(new Question());
+		}
+	}
 
 	void AddTeam()
 	{
