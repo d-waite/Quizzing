@@ -1,16 +1,15 @@
-﻿
-<p>Question @QuestionNum</p>
+﻿<p>Question @QuestionNum</p>
 
-<form onsubmit="">
+<EditForm Model="@RawData" OnValidSubmit="UpdateQuestion">
 <label for="qtype">Question Type:</label>
-<InputSelect name="qtype" id="qtype" @bind-Value="selectedType" @oninput="onTypeChange">
+	<InputSelect name="qtype" id="qtype" @bind-Value="RawData.selectedType" @oninput="onTypeChange">
 	<option value="" selected disabled>Select...</option>
 	<option value="mc">Multiple Choice</option>
 	<option value="s">Speed</option>
 </InputSelect>
 
 <label for="qpts">Point Amount:</label>
-<InputSelect name= "qpts" id="qpts" @bind-Value="selectedPoints" disabled="@isMultipleChoice">
+	<InputSelect name="qpts" id="qpts" @bind-Value="RawData.selectedPoints" disabled="@isMultipleChoice">
 	<option value="" selected disabled>Select...</option>
 	<option value="20">20</option>
 	<option value="30">30</option>
@@ -19,12 +18,20 @@
 
 <button type="submit">Submit</button>
 
-</form>
+</EditForm>
 
 @code {
-	private string selectedType = "";
-	private string selectedPoints = "";
+
+	class rawData
+	{
+		public string selectedType { get; set; }
+		public string selectedPoints { get; set; }
+	}
+
+	rawData RawData = new rawData();
+
 	private bool isMultipleChoice = false;
+	private string fnCalled = "false";
 
 	[Parameter]
 	public string QuestionNum { get; set; }
@@ -34,21 +41,39 @@
 
 	private void onTypeChange(ChangeEventArgs e)
 	{
-		selectedType = e.Value?.ToString() ?? "";
+		RawData.selectedType = e.Value?.ToString() ?? "";
 
-		isMultipleChoice = selectedType == "mc";
+		isMultipleChoice = RawData.selectedType == "mc";
 
 		if (isMultipleChoice)
 		{
-			selectedPoints = "20";
+			RawData.selectedPoints = "20";
 		}
 
 		StateHasChanged();
 	}
 
-	private void UpdateQuestion(QuestionType qtype, int qpts, int qnum)
+	private void UpdateQuestion()
 	{
-		Questions[qnum - 1].Type = qtype;
-		Questions[qnum - 1].PointAmt = qpts;
+
+		if (RawData.selectedType != "" && RawData.selectedPoints != "")
+		{
+			QuestionType SelectedType;
+			int SelectedPoints;
+
+			if (RawData.selectedType == "mc")
+			{
+				SelectedType = QuestionType.MultipleChoice;
+			} else
+			{
+				SelectedType = QuestionType.Speed;
+			}
+
+			SelectedPoints = int.Parse(RawData.selectedPoints);
+
+			int qnum = int.Parse(QuestionNum);
+			Questions[qnum - 1].Type = SelectedType;
+			Questions[qnum - 1].PointAmt = SelectedPoints;
+		}
 	}
 }

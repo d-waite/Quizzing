@@ -1,0 +1,53 @@
+﻿
+<td><button @onclick="() => CorrectAnswer(CellNum,Team,!correctSelected)"> <img src="svg/check.svg" /> </button><button @onclick="() => WrongAnswer(CellNum,Team,!wrongSelected)"> <img src="svg/x.svg" /> </button></td>
+
+@code {
+	[Parameter]
+	public List<Question> Questions { get; set; }
+	[Parameter]
+	public QuizzingTeam Team { get; set; }
+	[Parameter]
+	public int CellNum { get; set; }
+	[Parameter]
+	public EventCallback<string> onScoreChange { get; set; }
+
+
+	private bool wrongSelected = false;
+	private bool correctSelected = false;
+
+
+
+	void CorrectAnswer(int qnum, QuizzingTeam team, bool isSelected)
+	{
+		if (isSelected)
+		{
+			team.Score += Questions[qnum - 1].PointAmt;
+		}
+		else
+		{
+			team.Score -= Questions[qnum - 1].PointAmt;
+		}
+
+		onScoreChange.InvokeAsync("yes");
+	}
+
+	void WrongAnswer(int qnum, QuizzingTeam team, bool isSelected)
+	{
+		if (isSelected)
+		{
+			if (Questions[qnum - 1].Type == QuestionType.Speed)
+			{
+				team.Score -= Questions[qnum - 1].PointAmt;
+			}
+		}
+		else
+		{
+			if (Questions[qnum - 1].Type == QuestionType.Speed)
+			{
+				team.Score += Questions[qnum - 1].PointAmt;
+			}
+		}
+
+		onScoreChange.InvokeAsync("yes");
+	}
+}

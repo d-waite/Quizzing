@@ -7,6 +7,7 @@
 	<DropDowns @rendermode="InteractiveServer" QuestionNum="@questionNumStr" Questions="@questions"/>
 }
 
+<p>@scoreUpdated</p>
 
 <div class="d-flex pt-3">
 	<table border="1">
@@ -28,7 +29,9 @@
 				<th>@team.Name</th>
 				@for (int i = 1; i <= 50; i++)
 				{
-						<td><button> <img src="svg/check.svg"/> </button><button> <img src="svg/x.svg"/> </button></td>
+					int currentNum = i;
+					
+					<Cell Questions="@questions" Team="@team" CellNum="@currentNum" onScoreChange="HandleStateChange"/>
 					
 				}
 					<th>@team.Score</th>
@@ -43,6 +46,7 @@
 	private List<Question> questions = new List<Question>();
 	private bool showForm = false;
 	private string questionNumStr;
+	private string scoreUpdated = "no";
 
 	protected override void OnInitialized()
 	{
@@ -73,5 +77,11 @@
 	{
 		showForm = true;
 		questionNumStr = number.ToString();
+	}
+
+	void HandleStateChange(string updated)
+	{
+		scoreUpdated = updated;
+		StateHasChanged();
 	}
 }
