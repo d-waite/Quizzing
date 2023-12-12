@@ -7,8 +7,6 @@
 	<DropDowns @rendermode="InteractiveServer" QuestionNum="@questionNumStr" Questions="@questions"/>
 }
 
-<p>@scoreUpdated</p>
-
 <div class="d-flex pt-3">
 	<table border="1">
 		<thead>
@@ -46,7 +44,6 @@
 	private List<Question> questions = new List<Question>();
 	private bool showForm = false;
 	private string questionNumStr;
-	private string scoreUpdated = "no";
 
 	protected override void OnInitialized()
 	{
@@ -81,7 +78,6 @@
 
 	void HandleStateChange(string updated)
 	{
-		scoreUpdated = updated;
 		StateHasChanged();
 	}
 }

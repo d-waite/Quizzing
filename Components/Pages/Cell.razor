@@ -1,5 +1,5 @@
 ﻿
-<td><button @onclick="() => CorrectAnswer(CellNum,Team,!correctSelected)"> <img src="svg/check.svg" /> </button><button @onclick="() => WrongAnswer(CellNum,Team,!wrongSelected)"> <img src="svg/x.svg" /> </button></td>
+<td><button @onclick="() => CorrectAnswer(CellNum,Team,ref correctSelected)" disabled="@wrongSelected"> <img src="svg/check.svg" /> </button><button @onclick="() => WrongAnswer(CellNum,Team,ref wrongSelected)" disabled="@correctSelected"> <img src="svg/x.svg" /> </button></td>
 
 @code {
 	[Parameter]
@@ -17,8 +17,11 @@
 
 
 
-	void CorrectAnswer(int qnum, QuizzingTeam team, bool isSelected)
+	void CorrectAnswer(int qnum, QuizzingTeam team, ref bool isSelected)
 	{
+
+		isSelected = !isSelected;
+
 		if (isSelected)
 		{
 			team.Score += Questions[qnum - 1].PointAmt;
@@ -31,8 +34,11 @@
 		onScoreChange.InvokeAsync("yes");
 	}
 
-	void WrongAnswer(int qnum, QuizzingTeam team, bool isSelected)
+	void WrongAnswer(int qnum, QuizzingTeam team, ref bool isSelected)
 	{
+
+		isSelected = !isSelected;
+
 		if (isSelected)
 		{
 			if (Questions[qnum - 1].Type == QuestionType.Speed)
